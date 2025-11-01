@@ -10,14 +10,11 @@ exports.listIdeas = async (req, res) => {
     res.status(500).send('Erro ao carregar ideias');
   }
 };
-
-// Mostrar detalhes de uma ideia
 exports.ideaDetail = async (req, res) => {
   try {
     const idea = await Idea.findById(req.params.id).lean();
     if (!idea) return res.status(404).send('Ideia não encontrada');
 
-    // Verifica se o usuário logado já votou
     const userHasVoted = req.user ? idea.votes.some(v => v.toString() === req.user._id.toString()) : false;
 
     const isAuthor = req.user?._id.toString() === idea.userId.toString();
@@ -32,13 +29,10 @@ exports.ideaDetail = async (req, res) => {
     res.status(500).send('Erro ao exibir ideia');
   }
 };
-// Formulário para criar nova ideia
 exports.createIdeaForm = (req, res) => {
-  // Passa um objeto vazio para o template
   res.render('ideas/idea_form.hbs', { idea: {}, user: req.user });
 };
 
-// Criar ideia
 exports.createIdea = async (req, res) => {
   try {
     if (!req.user) {
@@ -53,7 +47,7 @@ exports.createIdea = async (req, res) => {
       description,
       category,
       status: 'Pendente',
-      votes: [], // inicializa array de votos vazio
+      votes: [], 
     });
 
     await newIdea.save();
@@ -65,7 +59,6 @@ exports.createIdea = async (req, res) => {
   }
 };
 
-// Formulário para editar ideia
 exports.editIdeaForm = async (req, res) => {
   try {
     const idea = await Idea.findById(req.params.id).lean();
@@ -78,7 +71,6 @@ exports.editIdeaForm = async (req, res) => {
   }
 };
 
-// Atualizar ideia
 exports.updateIdea = async (req, res) => {
   try {
     const { title, description, category, status } = req.body;

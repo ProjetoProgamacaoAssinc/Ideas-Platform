@@ -15,7 +15,6 @@ const voteRoutes = require('./routes/voteRoutes');
 // Middlewares personalizados
 const setUser = require('./middlewares/setUserMiddleware');
 
-// Rotas
 const ideaRoutes = require('./routes/ideaRoutes');
 const authRoutes = require('./routes/authRoutes');
 
@@ -42,10 +41,8 @@ app.use(session({
   cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }));
 
-// Middleware global para disponibilizar usuário
 app.use(setUser);
 
-// Configuração do Handlebars
 const hbs = create({
   extname: '.hbs',
   defaultLayout: 'main',
@@ -57,14 +54,12 @@ const hbs = create({
       return options.inverse(this);
     },
     ifIncludes: function(array, value, options) {
-      // Retorna o bloco se estiver incluso
       if (Array.isArray(array) && array.includes(value)) {
         return options.fn(this);
       }
       return options.inverse(this);
     },
     unlessIncludes: function(array, value, options) {
-      // Retorna o bloco se NÃO estiver incluso
       if (!Array.isArray(array) || !array.includes(value)) {
         return options.fn(this);
       }
@@ -89,7 +84,6 @@ app.get('/', (req, res) => {
   res.redirect('/ideas');
 });
 
-// Middleware de autenticação
 function isAuthenticated(req, res, next) {
   if (req.session && req.session.userId) return next();
   return res.redirect('/login');
