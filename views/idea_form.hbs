@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-md-8 offset-md-2">
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white">
+        {{#if idea}}
+          <h3 class="mb-0"><i class="fas fa-edit"></i> Editar Ideia</h3>
+        {{else}}
+          <h3 class="mb-0"><i class="fas fa-plus-circle"></i> Enviar Nova Ideia</h3>
+        {{/if}}
+      </div>
+      <div class="card-body">
+
+        {{!-- Exibição de erros de validação (requer 'errors' do backend) --}}
+        {{#if errors}}
+          {{#each errors}}
+            <div class="alert alert-danger">{{msg}}</div>
+          {{/each}}
+        {{/if}}
+
+        {{!-- O formulário usa PUT para editar (requer method-override) ou POST para criar --}}
+        <form action="{{#if idea}}/ideas/{{idea._id}}?_method=PUT{{else}}/ideas{{/if}}" method="POST">
+          <div class="mb-3">
+            <label for="title" class="form-label">Título da Ideia</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{idea.title}}" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="category" class="form-label">Categoria</label>
+            <select class="form-select" id="category" name="category" required>
+              <option value="" disabled {{#unless idea.category}}selected{{/unless}}>Selecione uma categoria</option>
+              {{!-- Lógica simples para selecionar a categoria existente --}}
+              <option value="Inovação" {{#ifeq idea.category "Inovação"}}selected{{/ifeq}}>Inovação</option>
+              <option value="Processos" {{#ifeq idea.category "Processos"}}selected{{/ifeq}}>Processos</option>
+              <option value="RH" {{#ifeq idea.category "RH"}}selected{{/ifeq}}>Recursos Humanos</option>
+              <option value="Tecnologia" {{#ifeq idea.category "Tecnologia"}}selected{{/ifeq}}>Tecnologia</option>
+              <option value="Marketing" {{#ifeq idea.category "Marketing"}}selected{{/ifeq}}>Marketing</option>
+              <option value="Outros" {{#ifeq idea.category "Outros"}}selected{{/ifeq}}>Outros</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label">Descrição Completa</label>
+            <textarea class="form-control" id="description" name="description" rows="6" required>{{idea.description}}</textarea>
+          </div>
+          
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a href="/" class="btn btn-secondary me-md-2">Cancelar</a>
+            <button type="submit" class="btn btn-primary">
+              {{#if idea}}
+                <i class="fas fa-save"></i> Salvar Alterações
+              {{else}}
+                <i class="fas fa-paper-plane"></i> Enviar Ideia
+              {{/if}}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
