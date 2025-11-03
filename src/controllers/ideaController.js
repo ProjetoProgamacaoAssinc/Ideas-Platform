@@ -3,8 +3,21 @@ const Idea = require('../models/idea');
 // Listar ideias
 exports.listIdeas = async (req, res) => {
   try {
-    const ideas = await Idea.find().sort({ createdAt: -1 }).lean();
-    res.render('ideas/index.hbs', { title: 'Ideias em Destaque', ideas, user: req.user });
+    const filter = {};
+    const category = req.query.category; 
+
+    if (category && category !== '') {
+      filter.category = category;
+    }
+
+    const ideas = await Idea.find(filter).sort({ createdAt: -1 }).lean();
+    
+    res.render('ideas/index.hbs', { 
+      title: 'Ideias em Destaque', 
+      ideas, 
+      user: req.user,
+      category: category
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send('Erro ao carregar ideias');
@@ -52,6 +65,7 @@ exports.createIdea = async (req, res) => {
 
     await newIdea.save();
 
+    req.flash('success_msg', 'Ideia enviada com sucesso!');
     res.redirect('/ideas');
   } catch (err) {
     console.error('Erro ao criar ideia:', err);

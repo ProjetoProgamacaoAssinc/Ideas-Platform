@@ -21,13 +21,13 @@ exports.loginUser = async (req, res) => {
       return res.render('auth/login', { error: 'Senha incorreta' });
     }
 
-    // 🔥 Salva o usuário na sessão
     req.session.userId = user._id;
     req.session.user = { _id: user._id, name: user.name, email: user.email };
 
-    // ✅ Aguarda salvar a sessão antes de redirecionar
     req.session.save((err) => {
       if (err) console.error('Erro ao salvar sessão:', err);
+      
+      req.flash('success_msg', 'Login efetuado com sucesso!');
       res.redirect('/ideas');
     });
   } catch (err) {
@@ -48,6 +48,10 @@ exports.registerUser = async (req, res) => {
     const { name, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.render('auth/register', { error: 'Usuário já cadastrado' });
+    }
+
     if (existingUser) {
       return res.render('auth/register', { error: 'Usuário já cadastrado' });
     }

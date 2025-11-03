@@ -9,7 +9,7 @@ const MongoStore = require('connect-mongo');
 const User = require('./models/user');
 const Idea = require('./models/idea');
 const voteRoutes = require('./routes/voteRoutes');
-
+const flash = require('express-flash')
 
 
 // Middlewares personalizados
@@ -40,6 +40,8 @@ app.use(session({
   }),
   cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }));
+
+app.use(flash());
 
 app.use(setUser);
 
