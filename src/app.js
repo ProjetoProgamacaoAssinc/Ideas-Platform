@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('express-async-errors');
 const express = require('express');
 const { create } = require('express-handlebars');
 const path = require('path');
@@ -9,8 +10,9 @@ const MongoStore = require('connect-mongo');
 const User = require('./models/user');
 const Idea = require('./models/idea');
 const voteRoutes = require('./routes/voteRoutes');
-
-
+const flash = require('express-flash')
+const csurf = require('csurf');
+const helmet = require('helmet');
 
 // Middlewares personalizados
 const setUser = require('./middlewares/setUserMiddleware');
@@ -20,6 +22,8 @@ const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(helmet());
 
 // Conexão com MongoDB
 connectDB();
@@ -40,6 +44,17 @@ app.use(session({
   }),
   cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }));
+
+app.use(flash());
+
+// Configuração CSRF (ADICIONE DE VOLTA)
+const csrfProtection = csurf();
+app.use(csrfProtection); 
+
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
 
 app.use(setUser);
 

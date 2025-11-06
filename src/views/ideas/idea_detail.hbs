@@ -23,6 +23,7 @@
       {{!-- Botão de Votar --}}
       {{#unless ../userHasVoted}}
         <form action="/ideas/vote/{{_id}}" method="POST" class="d-inline">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
           <button class="btn btn-success btn-lg" type="submit"><i class="fas fa-thumbs-up"></i> Votar Agora</button>
         </form>
       {{/unless}}
@@ -31,6 +32,7 @@
       {{#if ../isAuthor}}
         <a href="/ideas/edit/{{_id}}" class="btn btn-warning btn-lg ms-2"><i class="fas fa-edit"></i> Editar</a>
         <form action="/ideas/{{_id}}?_method=DELETE" method="POST" class="d-inline ms-2" onsubmit="return confirm('Tem certeza que deseja excluir esta ideia?');">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
           <button type="submit" class="btn btn-danger btn-lg"><i class="fas fa-trash"></i> Excluir</button>
         </form>
       {{/if}}

@@ -7,6 +7,26 @@
   {{/if}}
 </div>
 
+<form action="/ideas" method="GET" class="row mb-4 align-items-center">
+  <div class="col-md-4">
+    <label for="category" class="form-label fw-bold">Filtrar por Categoria:</label>
+    <select class="form-select" id="category" name="category" onchange="this.form.submit()">
+      <option value="" {{#unless category}}selected{{/unless}}>Todas as Categorias</option>
+      <option value="Inovação" {{#ifeq category "Inovação"}}selected{{/ifeq}}>Inovação</option>
+      <option value="Processos" {{#ifeq category "Processos"}}selected{{/ifeq}}>Processos</option>
+      <option value="RH" {{#ifeq category "RH"}}selected{{/ifeq}}>Recursos Humanos</option>
+      <option value="Tecnologia" {{#ifeq category "Tecnologia"}}selected{{/ifeq}}>Tecnologia</option>
+      <option value="Marketing" {{#ifeq category "Marketing"}}selected{{/ifeq}}>Marketing</option>
+      <option value="Outros" {{#ifeq category "Outros"}}selected{{/ifeq}}>Outros</option>
+    </select>
+  </div>
+  {{#if category}}
+    <div class="col-md-auto mt-3 mt-md-0">
+      <a href="/ideas" class="btn btn-outline-secondary">Limpar Filtro</a>
+    </div>
+  {{/if}}
+</form>
+
 <hr>
 
 <div class="row">
@@ -28,6 +48,7 @@
           {{#if ../user}}
             {{#unlessIncludes this.votes ../user._id}}
               <form action="/ideas/vote/{{this._id}}" method="POST" class="d-inline">
+              <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button type="submit" class="btn btn-success btn-sm">
                   <i class="fas fa-thumbs-up"></i> Votar
                 </button>
