@@ -1,10 +1,21 @@
-import { findById } from '../models/idea.js';
+const Idea = require('../models/idea');
 
-export default async (req, res, next) => {
-  const idea = await findById(req.params.id);
-  if (!idea) return res.status(404).send('Ideia não encontrada');
-  if (idea.author.toString() !== req.session.userId) {
-    return res.status(403).send('Acesso negado');
+module.exports = async (req, res, next) => {
+  try {
+    const idea = await Idea.findById(req.params.id);
+    if (!idea) {
+      req.flash('error_msg', 'Ideia não encontrada');
+      return res.redirect('/ideas');
+    }
+    if (idea.userId.toString() !== req.session.userId) {
+      req.flash('error_msg', 'Você não tem permissão para esta ação');
+      return res.redirect('/ideas');
+    }
+    next();
+    
+  } catch (err) {
+    console.error(err);
+    req.flash('error_msg', 'Erro ao verificar permissões');
+    res.redirect('/ideas');
   }
-  next();
 };

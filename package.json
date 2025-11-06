@@ -2,9 +2,9 @@
   "name": "plataforma-ideias",
   "version": "1.0.0",
   "description": "Plataforma de Ideias do Grupo J&F",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node src/app.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -12,9 +12,11 @@
     "csurf": "^1.11.0",
     "dotenv": "^17.2.3",
     "express": "^4.19.2",
+    "express-async-errors": "^3.1.1",
     "express-flash": "^0.0.2",
     "express-handlebars": "^7.1.2",
     "express-session": "^1.18.2",
+    "helmet": "^8.1.0",
     "method-override": "^3.0.0",
     "mongoose": "^8.19.2"
   }
