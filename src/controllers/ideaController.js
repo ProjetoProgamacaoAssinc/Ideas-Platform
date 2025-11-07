@@ -84,21 +84,33 @@ exports.createIdea = async (req, res) => {
 
     const { title, description, category } = req.body;
 
+    const currentDate = new Date();
+
+    const now = new Date();
+    const formattedDate = now
+    .toLocaleString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+    .replace(',', ' -');
+
     const newIdea = new Idea({
       userId: req.user._id,
       title,
       description,
+      date: formattedDate,
       category,
       status: 'Pendente',
       votes: [],
     });
 
     await newIdea.save();
-
     req.flash('success_msg', 'Ideia enviada com sucesso!');
     res.redirect('/ideas');
   } catch (err) {
-    console.error('Erro ao criar ideia:', err);
     res.status(500).send('Erro ao criar ideia');
   }
 };
