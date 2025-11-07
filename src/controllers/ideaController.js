@@ -4,9 +4,38 @@ const Idea = require('../models/idea');
 exports.listIdeas = async (req, res) => {
   try {
     const filter = {};
+
+    // Categoria
     const category = req.query.category;
     if (category && category !== '') {
       filter.category = category;
+    }
+
+    // Status
+    const status = req.query.status;
+    if (status && status !== '') {
+      filter.status = status;
+    }
+
+    // Filtro por data
+    const dateFilter = req.query.date;
+    if (dateFilter && dateFilter !== '') {
+      const now = new Date();
+      let fromDate;
+
+      if (dateFilter === 'today') {
+        fromDate = new Date(now.setHours(0, 0, 0, 0));
+      } else if (dateFilter === 'week') {
+        fromDate = new Date();
+        fromDate.setDate(now.getDate() - 7);
+      } else if (dateFilter === 'month') {
+        fromDate = new Date();
+        fromDate.setMonth(now.getMonth() - 1);
+      }
+
+      if (fromDate) {
+        filter.createdAt = { $gte: fromDate };
+      }
     }
 
     const ideas = await Idea.find(filter).sort({ createdAt: -1 }).lean();
@@ -15,7 +44,9 @@ exports.listIdeas = async (req, res) => {
       title: 'Ideias em Destaque',
       ideas,
       user: req.user,
-      category: category
+      category,
+      status,
+      date: dateFilter
     });
   } catch (err) {
     console.error(err);
@@ -53,21 +84,33 @@ exports.createIdea = async (req, res) => {
 
     const { title, description, category } = req.body;
 
+    const currentDate = new Date();
+
+    const now = new Date();
+    const formattedDate = now
+    .toLocaleString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+    .replace(',', ' -');
+
     const newIdea = new Idea({
       userId: req.user._id,
       title,
       description,
+      date: formattedDate,
       category,
       status: 'Pendente',
       votes: [],
     });
 
     await newIdea.save();
-
     req.flash('success_msg', 'Ideia enviada com sucesso!');
     res.redirect('/ideas');
   } catch (err) {
-    console.error('Erro ao criar ideia:', err);
     res.status(500).send('Erro ao criar ideia');
   }
 };

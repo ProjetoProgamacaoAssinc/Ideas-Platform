@@ -22,6 +22,8 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(helmet());
 
 // Conexão com MongoDB
@@ -69,7 +71,22 @@ const hbs = create({
         return options.fn(this);
       }
       return options.inverse(this);
-    }
+    },
+    ifEquals(a, b, options) {
+      return a === b ? options.fn(this) : options.inverse(this);
+    },
+    or() {
+      return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
+    },
+    formatDate: (date) => {
+    return new Date(date).toLocaleString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
   }
 });
 
