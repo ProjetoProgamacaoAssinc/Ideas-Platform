@@ -10,7 +10,7 @@
 <form action="/ideas" method="GET" class="row mb-4 align-items-center">
   <div class="col-md-4">
     <label for="category" class="form-label fw-bold">Filtrar por Categoria:</label>
-    <select class="form-select" id="category" name="category" onchange="this.form.submit()">
+    <select class="form-select" id="category" name="category">
       <option value="" {{#unless category}}selected{{/unless}}>Todas as Categorias</option>
       <option value="Inovação" {{#ifeq category "Inovação"}}selected{{/ifeq}}>Inovação</option>
       <option value="Processos" {{#ifeq category "Processos"}}selected{{/ifeq}}>Processos</option>
@@ -71,3 +71,4 @@
     </div>
   {{/each}}
 </div>
+<script src="/js/filter.js"></script>
