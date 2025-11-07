@@ -7,23 +7,49 @@
   {{/if}}
 </div>
 
-<form action="/ideas" method="GET" class="row mb-4 align-items-center">
+<form id="filtersForm" action="/ideas" method="GET" class="row mb-4 align-items-center">
+
+  <!-- Categoria -->
   <div class="col-md-4">
-    <label for="category" class="form-label fw-bold">Filtrar por Categoria:</label>
+    <label for="category" class="form-label fw-bold">Categoria:</label>
     <select class="form-select" id="category" name="category">
-      <option value="" {{#unless category}}selected{{/unless}}>Todas as Categorias</option>
-      <option value="Inovação" {{#ifeq category "Inovação"}}selected{{/ifeq}}>Inovação</option>
-      <option value="Processos" {{#ifeq category "Processos"}}selected{{/ifeq}}>Processos</option>
-      <option value="RH" {{#ifeq category "RH"}}selected{{/ifeq}}>Recursos Humanos</option>
-      <option value="Tecnologia" {{#ifeq category "Tecnologia"}}selected{{/ifeq}}>Tecnologia</option>
-      <option value="Marketing" {{#ifeq category "Marketing"}}selected{{/ifeq}}>Marketing</option>
-      <option value="Outros" {{#ifeq category "Outros"}}selected{{/ifeq}}>Outros</option>
+      <option value="" {{#unless category}}selected{{/unless}}>Todas</option>
+      <option value="Inovação" {{#ifEquals category "Inovação"}}selected{{/ifEquals}}>Inovação</option>
+      <option value="Processos" {{#ifEquals category "Processos"}}selected{{/ifEquals}}>Processos</option>
+      <option value="RH" {{#ifEquals category "RH"}}selected{{/ifEquals}}>Recursos Humanos</option>
+      <option value="Tecnologia" {{#ifEquals category "Tecnologia"}}selected{{/ifEquals}}>Tecnologia</option>
+      <option value="Marketing" {{#ifEquals category "Marketing"}}selected{{/ifEquals}}>Marketing</option>
+      <option value="Outros" {{#ifEquals category "Outros"}}selected{{/ifEquals}}>Outros</option>
     </select>
   </div>
-  {{#if category}}
-    <div class="col-md-auto mt-3 mt-md-0">
-      <a href="/ideas" class="btn btn-outline-secondary">Limpar Filtro</a>
-    </div>
+
+  <!-- Status -->
+  <div class="col-md-4">
+    <label for="status" class="form-label fw-bold">Status:</label>
+    <select class="form-select" id="status" name="status">
+      <option value="" {{#unless status}}selected{{/unless}}>Todos</option>
+      <option value="Pendente" {{#ifEquals status "Pendente"}}selected{{/ifEquals}}>Pendente</option>
+      <option value="Aprovado" {{#ifEquals status "Aprovado"}}selected{{/ifEquals}}>Aprovado</option>
+      <option value="Recusado" {{#ifEquals status "Recusado"}}selected{{/ifEquals}}>Recusado</option>
+    </select>
+  </div>
+
+  <!-- Data -->
+  <div class="col-md-4">
+    <label for="date" class="form-label fw-bold">Data:</label>
+    <select class="form-select" id="date" name="date">
+      <option value="" {{#unless date}}selected{{/unless}}>Todas</option>
+      <option value="today" {{#ifEquals date "today"}}selected{{/ifEquals}}>Hoje</option>
+      <option value="week" {{#ifEquals date "week"}}selected{{/ifEquals}}>Últimos 7 dias</option>
+      <option value="month" {{#ifEquals date "month"}}selected{{/ifEquals}}>Últimos 30 dias</option>
+    </select>
+  </div>
+
+  <!-- Botão limpar -->
+  {{#if (or category status date)}}
+  <div class="col-12 mt-3">
+    <a href="/ideas" class="btn btn-outline-secondary">Limpar Filtros</a>
+  </div>
   {{/if}}
 </form>
 
@@ -58,8 +84,6 @@
               </button>
             {{/unlessIncludes}}
           {{/if}}
-
-
         </div>
       </div>
     </div>
@@ -71,4 +95,5 @@
     </div>
   {{/each}}
 </div>
+
 <script src="/js/filter.js"></script>

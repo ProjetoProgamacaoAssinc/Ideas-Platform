@@ -71,6 +71,12 @@ const hbs = create({
         return options.fn(this);
       }
       return options.inverse(this);
+    },
+    ifEquals(a, b, options) {
+      return a === b ? options.fn(this) : options.inverse(this);
+    },
+    or() {
+      return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
     }
   }
 });
