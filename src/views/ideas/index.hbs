@@ -48,7 +48,6 @@
           {{#if ../user}}
             {{#unlessIncludes this.votes ../user._id}}
               <form action="/ideas/vote/{{this._id}}" method="POST" class="d-inline">
-              <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <button type="submit" class="btn btn-success btn-sm">
                   <i class="fas fa-thumbs-up"></i> Votar
                 </button>

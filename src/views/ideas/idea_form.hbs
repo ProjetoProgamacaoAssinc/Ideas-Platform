@@ -18,7 +18,6 @@
         {{/if}}
 
         <form action="{{#if idea._id}}/ideas/{{idea._id}}?_method=PUT{{else}}/ideas{{/if}}" method="POST">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}">
           <div class="mb-3">
             <label for="title" class="form-label">Título da Ideia</label>
             <input type="text" class="form-control" id="title" name="title" value="{{idea.title}}" required>
