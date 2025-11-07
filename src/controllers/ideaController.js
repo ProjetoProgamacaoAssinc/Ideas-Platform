@@ -4,17 +4,16 @@ const Idea = require('../models/idea');
 exports.listIdeas = async (req, res) => {
   try {
     const filter = {};
-    const category = req.query.category; 
-
+    const category = req.query.category;
     if (category && category !== '') {
       filter.category = category;
     }
 
     const ideas = await Idea.find(filter).sort({ createdAt: -1 }).lean();
-    
-    res.render('ideas/index.hbs', { 
-      title: 'Ideias em Destaque', 
-      ideas, 
+
+    res.render('ideas/index.hbs', {
+      title: 'Ideias em Destaque',
+      ideas,
       user: req.user,
       category: category
     });
@@ -31,11 +30,11 @@ exports.ideaDetail = async (req, res) => {
     const userHasVoted = req.user ? idea.votes.some(v => v.toString() === req.user._id.toString()) : false;
 
     const isAuthor = req.user?._id.toString() === idea.userId.toString();
-    res.render('ideas/idea_detail.hbs', { 
-      idea, 
-      user: req.user, 
-      isAuthor, 
-      userHasVoted 
+    res.render('ideas/idea_detail.hbs', {
+      idea,
+      user: req.user,
+      isAuthor,
+      userHasVoted
     });
   } catch (err) {
     console.error(err);
@@ -60,7 +59,7 @@ exports.createIdea = async (req, res) => {
       description,
       category,
       status: 'Pendente',
-      votes: [], 
+      votes: [],
     });
 
     await newIdea.save();

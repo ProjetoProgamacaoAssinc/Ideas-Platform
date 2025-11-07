@@ -11,7 +11,6 @@ const User = require('./models/user');
 const Idea = require('./models/idea');
 const voteRoutes = require('./routes/voteRoutes');
 const flash = require('express-flash')
-const csurf = require('csurf');
 const helmet = require('helmet');
 
 // Middlewares personalizados
@@ -46,15 +45,6 @@ app.use(session({
 }));
 
 app.use(flash());
-
-// Configuração CSRF (ADICIONE DE VOLTA)
-const csrfProtection = csurf();
-app.use(csrfProtection); 
-
-app.use((req, res, next) => {
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
 
 app.use(setUser);
 
