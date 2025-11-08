@@ -1,0 +1,43 @@
+
+name: PlatformIdeasDeploy
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Faz o checkout do repositório
+      - uses: actions/checkout@v4
+
+      # Configura o Node.js (altere a versão conforme necessário)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # Instala as dependências do projeto
+      - name: Install dependencies
+        run: npm install
+
+      # (Opcional) Executa os testes, caso você tenha
+      - name: Run tests
+        run: npm test
+        continue-on-error: true  # evita falha do deploy se não houver testes
+
+      # (Opcional) Executa build se seu projeto tiver scripts de build
+      - name: Build project
+        run: npm run build --if-present
+
+      # Realiza o deploy automático no Render
+      - name: Render Deploy Action
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: srv-d47lfnali9vc738qn8a0
+          api-key: ${{ secrets.RENDER_API_KEY }}
