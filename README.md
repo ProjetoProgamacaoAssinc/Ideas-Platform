@@ -14,6 +14,15 @@ Ele armazena **usuários**, **ideias** e **votos**, assegurando regras de unicid
 ```bash
 npm install mongoose
 ```
+```bash
+npm install express-async-errors
+```
+```bash
+npm install express-flash 
+```
+```bash
+npm install helmet 
+```
 Crie um arquivo `.env` com a variável de conexão:
 ```bash
 MONGODB_URI=mongodb://localhost:27017/ideias
