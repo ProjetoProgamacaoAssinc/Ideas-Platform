@@ -13,7 +13,6 @@ const voteRoutes = require('./routes/voteRoutes');
 const flash = require('express-flash')
 const helmet = require('helmet');
 
-// Middlewares personalizados
 const setUser = require('./middlewares/setUserMiddleware');
 
 const ideaRoutes = require('./routes/ideaRoutes');
@@ -34,7 +33,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Sessões
 app.use(session({
   secret: process.env.SESSION_SECRET || 'secret123',
   resave: false,
@@ -108,7 +106,6 @@ app.use('/', authRoutes);
 app.use('/ideas', ideaRoutes);
 app.use('/ideas/vote', voteRoutes);
 
-// Página inicial
 app.get('/', (req, res) => {
   res.redirect('/ideas');
 });
