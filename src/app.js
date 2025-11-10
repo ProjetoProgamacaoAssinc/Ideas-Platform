@@ -56,6 +56,13 @@ const hbs = create({
   layoutsDir: path.join(__dirname, 'views/layouts'),
   partialsDir: path.join(__dirname, 'views/partials'),
   helpers: {
+    eq: (a, b) => a === b,
+    unlessIncludes: (array, value, options) => {
+      if (!array || !array.includes(value)) {
+        return options.fn(this);
+      }
+      return options.inverse(this);
+    },
     ifeq: function(a, b, options) {
       if (a == b) return options.fn(this);
       return options.inverse(this);

@@ -29,8 +29,8 @@
     <select class="form-select" id="status" name="status">
       <option value="" {{#unless status}}selected{{/unless}}>Todos</option>
       <option value="Pendente" {{#ifEquals status "Pendente"}}selected{{/ifEquals}}>Pendente</option>
-      <option value="Aprovado" {{#ifEquals status "Aprovado"}}selected{{/ifEquals}}>Aprovado</option>
-      <option value="Recusado" {{#ifEquals status "Recusado"}}selected{{/ifEquals}}>Recusado</option>
+      <option value="Aprovada" {{#ifEquals status "Aprovada"}}selected{{/ifEquals}}>Aprovada</option>
+      <option value="Recusada" {{#ifEquals status "Recusada"}}selected{{/ifEquals}}>Recusada</option>
     </select>
   </div>
 
@@ -58,32 +58,41 @@
 <div class="row">
   {{#each ideas}}
     <div class="col-md-6 col-lg-4 mb-4">
-      <div class="card h-100 shadow-sm idea-card">
+      <div class="card h-100 shadow-sm idea-card 
+        {{#if (eq this.status "Aprovada")}}border border-warning{{/if}}">
+        
         <div class="card-body d-flex flex-column">
           <h5 class="card-title">{{this.title}}</h5>
           <span class="badge bg-secondary mb-2 align-self-start">{{this.category}}</span>
           <p class="card-text flex-grow-1">{{this.description}}</p>
-          <p class="card-text"> {{this.date}}</p>
+          <p class="card-text">{{this.date}}</p>
           <p class="text-muted mb-2">Status: {{this.status}}</p>
           <a href="/ideas/{{this._id}}" class="btn btn-outline-primary btn-sm mt-auto">Ver Detalhes</a>
         </div>
+
         <div class="card-footer d-flex justify-content-between align-items-center bg-light">
           <span class="fw-bold text-success">
             <i class="fas fa-vote-yea"></i> {{this.votes.length}} Votos
           </span>
 
           {{#if ../user}}
-            {{#unlessIncludes this.votes ../user._id}}
-              <form action="/ideas/vote/{{this._id}}" method="POST" class="d-inline">
-                <button type="submit" class="btn btn-success btn-sm">
-                  <i class="fas fa-thumbs-up"></i> Votar
-                </button>
-              </form>
-            {{else}}
-              <button class="btn btn-success btn-sm" disabled>
-                <i class="fas fa-check"></i> Já votou
+            {{#if (eq this.status "Aprovada")}}
+              <button class="btn btn-secondary btn-sm" disabled>
+                <i class="fas fa-check"></i> Aprovada
               </button>
-            {{/unlessIncludes}}
+            {{else}}
+              {{#unlessIncludes this.votes ../user._id}}
+                <form action="/ideas/vote/{{this._id}}" method="POST" class="d-inline">
+                  <button type="submit" class="btn btn-success btn-sm">
+                    <i class="fas fa-thumbs-up"></i> Votar
+                  </button>
+                </form>
+              {{else}}
+                <button class="btn btn-success btn-sm" disabled>
+                  <i class="fas fa-check"></i> Já votou
+                </button>
+              {{/unlessIncludes}}
+            {{/if}}
           {{/if}}
         </div>
       </div>
