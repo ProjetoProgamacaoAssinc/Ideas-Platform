@@ -55,24 +55,22 @@ const hbs = create({
   partialsDir: path.join(__dirname, 'views/partials'),
   helpers: {
     eq: (a, b) => a === b,
-    unlessIncludes: (array, value, options) => {
-      if (!array || !array.includes(value)) {
+    unlessIncludes: function(array, value, options) {
+      if (!Array.isArray(array)) array = [];
+      const stringArray = array.map(v => v.toString());
+      const stringValue = value ? value.toString() : '';
+      if (!stringArray.includes(stringValue)) {
         return options.fn(this);
       }
       return options.inverse(this);
     },
+
     ifeq: function(a, b, options) {
       if (a == b) return options.fn(this);
       return options.inverse(this);
     },
     ifIncludes: function(array, value, options) {
       if (Array.isArray(array) && array.includes(value)) {
-        return options.fn(this);
-      }
-      return options.inverse(this);
-    },
-    unlessIncludes: function(array, value, options) {
-      if (!Array.isArray(array) || !array.includes(value)) {
         return options.fn(this);
       }
       return options.inverse(this);
